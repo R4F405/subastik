@@ -81,11 +81,11 @@ Ahora, vamos a configurar y arrancar la API.
     Abre el nuevo archivo `.env` y **reemplaza `"tu_contraseña"`** con la contraseña que estableciste para el usuario `postgres` durante la instalación de PostgreSQL.
     ```env
     # Contenido de server/.env
-    DATABASE_URL="postgresql://postgres:tu_contraseña@localhost:5432/subastik_dev"
+    DATABASE_URL="postgresql://postgres:tu_contraseña@localhost:5432/subastik"
     ```
 
 4.  **Ejecuta la migración de la base de datos:**
-    Este comando creará todas las tablas necesarias en tu base de datos `subastik_dev` basándose en el esquema de Prisma.
+    Este comando creará todas las tablas necesarias en tu base de datos `subastik` basándose en el esquema de Prisma.
     ```bash
     npx prisma migrate dev
     ```
