@@ -1,5 +1,14 @@
 # Subastik - Plataforma de Subastas en Tiempo Real
 
+<p align="center">
+<a href="https://github.com/R4F405/subastik/releases"><img src="https://img.shields.io/badge/Version-v0.0.0-blue" alt="Version 0.0.0"></a>
+<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-v5.2.2-blue" alt="TypeScript v5.2.2"></a>
+<a href="https://react.dev/"><img src="https://img.shields.io/badge/React-v18.3.1-cyan" alt="React v18.3.1"></a>
+<a href="https://nestjs.com/"><img src="https://img.shields.io/badge/NestJS-v10.0.0-red" alt="NestJS v10.0.0"></a>
+<a href="LICENSE.md"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey" alt="License: CC BY-NC-SA 4.0"></a>
+<a href="https://deepwiki.com/R4F405/subastik"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+</p>
+
 ¡Bienvenido a Subastik! Este es el repositorio principal de una aplicación de subastas en tiempo real, construida con un stack tecnológico moderno y robusto. El proyecto está dividido en dos partes principales: un backend (API) y un frontend (cliente).
 
 ## 🚀 Stack Tecnológico
