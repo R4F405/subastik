@@ -1,0 +1,66 @@
+// Este es el esquema de la base de datos corregido y listo para migrar.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products    Product[]
+  bids        Bid[]
+  auctionsWon Auction[] @relation("AuctionWinner") // Relación corregida
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  imageUrl    String?
+  ownerId     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  owner   User      @relation(fields: [ownerId], references: [id])
+  auction Auction?
+}
+
+model Auction {
+  id           String    @id @default(uuid())
+  productId    String    @unique
+  startPrice   Float
+  currentPrice Float
+  startTime    DateTime
+  endTime      DateTime
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  product  Product @relation(fields: [productId], references: [id])
+  bids     Bid[]
+  winner   User?   @relation("AuctionWinner", fields: [winnerId], references: [id])
+  winnerId String?
+}
+
+model Bid {
+  id        String   @id @default(uuid())
+  amount    Float
+  createdAt DateTime @default(now())
+  auctionId String
+  userId    String
+
+  auction Auction @relation(fields: [auctionId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([auctionId])
+}
