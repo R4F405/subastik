@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
+// Validación de datos para el registro de usuarios
 export class RegisterDto {
   @IsString()
   @IsNotEmpty()

@@ -1,0 +1,87 @@
+import { useState, FormEvent, useEffect } from 'react';
+import { registerUser } from '../api/authApi';
+import type{ RegisterData } from '../types/auth';
+import axios from 'axios';
+
+// Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
+type RegisterFormData = RegisterData & { confirmPassword: string };
+
+export const useRegister = () => {
+    // Estado para manejar los campos del formulario
+    const [formData, setFormData] = useState<RegisterFormData>({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    });
+
+    // Estado para el feedback al usuario
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Si no hay mensaje de error o éxito, no hacemos nada
+        if (!error && !success) {
+            return;
+        }
+
+        // Inicia un temporizador
+        const timer = setTimeout(() => {
+            // Después de 5 segundos, limpia los mensajes
+            setError(null);
+            setSuccess(null);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [error, success]);
+
+    // Manejador para actualizar el estado cuando el usuario escribe
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [id]: value }));
+    };
+
+    // Lógica para manejar el envío del formulario
+    const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            setError('Las contraseñas no coinciden.');
+            return; // Detenemos el envío si no coinciden
+        }
+
+        setIsLoading(true);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const { name, email, password } = formData;
+            await registerUser({ name, email, password });
+      
+            setSuccess('¡Registro completado con éxito! Ahora puedes iniciar sesión.');
+            setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response) {
+                const errorMessage = Array.isArray(err.response.data.message)
+                ? err.response.data.message.join(', ')
+                : err.response.data.message;
+                setError(errorMessage || 'Ocurrió un error inesperado.');
+            } else {
+                setError('No se pudo conectar con el servidor.');
+            }
+        } finally {
+        setIsLoading(false);
+        }
+    };
+
+    // El hook devuelve el estado y las funciones que el componente necesita
+    return {
+        formData,
+        isLoading,
+        error,
+        success,
+        handleChange,
+        handleSubmit,
+    };
+};
