@@ -158,6 +158,42 @@ Aquí hay una lista de los comandos más útiles para cada parte del proyecto.
 
 ---
 
+## 🧪 Tests Integrados
+
+Este proyecto cuenta con tests integrados para garantizar la calidad y el correcto funcionamiento del código.
+
+### Cómo Ejecutar los Tests
+
+#### Backend (`/server`):
+1. Navega al directorio del servidor:
+   ```bash
+   cd server
+   ```
+2. Ejecuta los tests unitarios:
+   ```bash
+   npm test
+   ```
+3. Ejecuta los tests de integración (end-to-end):
+   ```bash
+   npm run test:e2e
+   ```
+
+#### Frontend (`/client`):
+1. Navega al directorio del cliente:
+   ```bash
+   cd client
+   ```
+2. Ejecuta los tests:
+   ```bash
+   npm test
+   ```
+
+### Importancia de los Tests
+
+Es fundamental que se agreguen tests al añadir nuevo código para garantizar que las nuevas funcionalidades no introduzcan errores y que el sistema siga funcionando correctamente. Esto ayuda a mantener la calidad del proyecto y facilita el desarrollo colaborativo.
+
+---
+
 ## 🧑‍💻 Desarrolladores
 
 Este proyecto está siendo desarrollado y mantenido por:
