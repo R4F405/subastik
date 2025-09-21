@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - BTS-9/Register # Puedes añadir más ramas si lo necesitas
   pull_request:
 
 jobs:
@@ -34,6 +33,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 20
+
+    - name: Set environment variables
+      run: echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/subastik" >> $GITHUB_ENV
 
     - name: Install dependencies (Backend)
       working-directory: server
