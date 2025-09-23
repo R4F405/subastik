@@ -1,9 +1,10 @@
 import axios from 'axios';
-import type{ RegisterData, User } from '../types/auth';
+import type{ RegisterData, User } from '../../types/auth/auth';
+import { APP_CONFIG } from '../../constants';
 
 // Instancia Axios con la URL base de la API
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: APP_CONFIG.API_BASE_URL,
 });
 
 // Función para registrar un usuario

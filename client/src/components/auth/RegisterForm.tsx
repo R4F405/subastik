@@ -1,4 +1,5 @@
-import { useRegister } from '../../hooks/useRegister';
+import { useRegister } from '../../hooks/auth/useRegister';
+import { Button, Input } from '../shared';
 
 export const RegisterForm = () => {
   const { formData, isLoading, error, success, handleChange, handleSubmit } = useRegister();
@@ -19,71 +20,59 @@ export const RegisterForm = () => {
         {success && <div className="p-3 my-2 text-sm text-white bg-green-800 bg-opacity-50 rounded-md border border-green-700">{success}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="text-sm font-bold text-gray-400" htmlFor="name">
-              Nombre
-            </label>
-            <input
-              type="text"
-              placeholder="Tu nombre público"
-              id="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-4 py-2 mt-2 text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="text-sm font-bold text-gray-400" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="tu@email.com"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 mt-2 text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="text-sm font-bold text-gray-400" htmlFor="password">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              placeholder="Mínimo 8 caracteres"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 mt-2 text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="text-sm font-bold text-gray-400" htmlFor="confirmPassword">
-              Confirmar Contraseña
-            </label>
-            <input
-              type="password"
-              placeholder="Repite la contraseña"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-2 mt-2 text-gray-200 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full px-6 py-3 mt-4 font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500 transition-all duration-200 disabled:bg-red-800 disabled:cursor-not-allowed"
-            >
-              {isLoading ? 'Registrando...' : 'Registrarme'}
-            </button>
-          </div>
+          <Input
+            label="Nombre"
+            type="text"
+            placeholder="Tu nombre público"
+            id="name"
+            value={formData.name}
+            onChange={handleChange}
+            variant="dark"
+            required
+          />
+          
+          <Input
+            label="Email"
+            type="email"
+            placeholder="tu@email.com"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+            variant="dark"
+            required
+          />
+          
+          <Input
+            label="Contraseña"
+            type="password"
+            placeholder="Mínimo 8 caracteres"
+            id="password"
+            value={formData.password}
+            onChange={handleChange}
+            variant="dark"
+            required
+          />
+          
+          <Input
+            label="Confirmar Contraseña"
+            type="password"
+            placeholder="Repite la contraseña"
+            id="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            variant="dark"
+            required
+          />
+          
+          <Button
+            type="submit"
+            variant="danger"
+            size="lg"
+            isLoading={isLoading}
+            className="w-full mt-4 bg-red-600 hover:bg-red-700 focus:ring-offset-gray-800 focus:ring-red-500"
+          >
+            Registrarme
+          </Button>
         </form>
         <p className="text-sm text-center text-gray-400">
           ¿Ya tienes una cuenta?{' '}

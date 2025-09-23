@@ -1,12 +1,15 @@
-import { useState, FormEvent, useEffect } from 'react';
-import { registerUser } from '../api/authApi';
-import type{ RegisterData } from '../types/auth';
+import { useState, useEffect, type FormEvent } from 'react';
+import { registerUser } from '../../api/auth/authApi';
+import type{ RegisterData } from '../../types/auth/auth';
+// import { useAuth } from '../../context'; // Listo para implementar login automático
 import axios from 'axios';
 
 // Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
 type RegisterFormData = RegisterData & { confirmPassword: string };
 
 export const useRegister = () => {
+    // const { login } = useAuth(); // Contexto listo para login automático en el futuro
+    
     // Estado para manejar los campos del formulario
     const [formData, setFormData] = useState<RegisterFormData>({
         name: '',
@@ -59,6 +62,7 @@ export const useRegister = () => {
             const { name, email, password } = formData;
             await registerUser({ name, email, password });
       
+            // El contexto está listo para cuando implementemos login automático después del registro
             setSuccess('¡Registro completado con éxito! Ahora puedes iniciar sesión.');
             setFormData({ name: '', email: '', password: '', confirmPassword: '' });
         } catch (err: unknown) {

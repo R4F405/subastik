@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from '../../src/auth/auth.service';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { AuthService } from '../../src/modules/auth/auth.service';
+import { PrismaService } from '../../src/shared/database/prisma.service';
 import { ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
