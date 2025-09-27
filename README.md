@@ -1,10 +1,12 @@
 # Subastik - Plataforma de Subastas en Tiempo Real
 
 <p align="center">
-<a href="https://github.com/R4F405/subastik/releases"><img src="https://img.shields.io/badge/Version-v0.0.0-blue" alt="Version 0.0.0"></a>
-<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-v5.2.2-blue" alt="TypeScript v5.2.2"></a>
-<a href="https://react.dev/"><img src="https://img.shields.io/badge/React-v18.3.1-cyan" alt="React v18.3.1"></a>
-<a href="https://nestjs.com/"><img src="https://img.shields.io/badge/NestJS-v10.0.0-red" alt="NestJS v10.0.0"></a>
+<a href="https://github.com/R4F405/subastik/releases"><img src="https://img.shields.io/badge/Version-v0.0.1-blue" alt="Version 0.0.1"></a>
+<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-v5.7.3-blue" alt="TypeScript v5.7.3"></a>
+<a href="https://react.dev/"><img src="https://img.shields.io/badge/React-v18.2.0-cyan" alt="React v18.2.0"></a>
+<a href="https://nestjs.com/"><img src="https://img.shields.io/badge/NestJS-v11.0.1-red" alt="NestJS v11.0.1"></a>
+<a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-v7.1.6-yellow" alt="Vite v7.1.6"></a>
+<a href="https://www.prisma.io/"><img src="https://img.shields.io/badge/Prisma-v6.16.2-2D3748" alt="Prisma v6.16.2"></a>
 <a href="LICENSE.md"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey" alt="License: CC BY-NC-SA 4.0"></a>
 <a href="https://deepwiki.com/R4F405/subastik"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
@@ -17,20 +19,23 @@ Este proyecto utiliza un conjunto de tecnologías modernas para garantizar un de
 
 ### Backend (`/server`)
 
-* **Framework**: [NestJS](https://nestjs.com/) - Un framework de Node.js progresivo para construir aplicaciones eficientes y escalables.
-* **Lenguaje**: TypeScript
+* **Framework**: [NestJS](https://nestjs.com/) v11.0.1 - Un framework de Node.js progresivo para construir aplicaciones eficientes y escalables.
+* **Lenguaje**: TypeScript v5.7.3
 * **Base de Datos**: [PostgreSQL](https://www.postgresql.org/) - Un potente sistema de base de datos relacional de código abierto.
-* **ORM**: [Prisma](https://www.prisma.io/) - ORM de nueva generación para Node.js y TypeScript.
-* **Autenticación**: JWT (JSON Web Tokens) con Passport.js.
-* **Tiempo Real**: WebSockets a través de `Socket.IO`.
+* **ORM**: [Prisma](https://www.prisma.io/) v6.16.2 - ORM de nueva generación para Node.js y TypeScript.
+* **Validación**: class-validator y class-transformer para validación de DTOs.
+* **Encriptación**: bcrypt para el hash de contraseñas.
+* **Testing**: Jest para pruebas unitarias y e2e.
 
 ### Frontend (`/client`)
 
-* **Framework**: [React](https://reactjs.org/) con [Vite](https://vitejs.dev/) - Una librería de JavaScript para construir interfaces de usuario, potenciada por una herramienta de desarrollo ultrarrápida.
-* **Lenguaje**: TypeScript
-* **Estilos**: [Tailwind CSS](https://tailwindcss.com/) - Un framework de CSS "utility-first" para un diseño rápido y personalizado.
-* **Gestión de Estado**: Zustand y TanStack Query (React Query).
-* **Enrutamiento**: React Router.
+* **Framework**: [React](https://reactjs.org/) v18.2.0 con [Vite](https://vitejs.dev/) v7.1.6 - Una librería de JavaScript para construir interfaces de usuario, potenciada por una herramienta de desarrollo ultrarrápida.
+* **Lenguaje**: TypeScript v5.8.3
+* **Estilos**: [Tailwind CSS](https://tailwindcss.com/) v3.3 - Un framework de CSS "utility-first" para un diseño rápido y personalizado.
+* **Gestión de Estado**: React Context API para autenticación.
+* **Enrutamiento**: React Router v7.9.1.
+* **HTTP Client**: Axios v1.12.2 para comunicación con la API.
+* **Testing**: Vitest v1.4.0 con Testing Library para pruebas de componentes.
 
 ---
 
@@ -99,6 +104,11 @@ Ahora, vamos a configurar y arrancar la API.
     npx prisma migrate dev
     ```
 
+5.  **Genera el cliente de Prisma:**
+    ```bash
+    npx prisma generate
+    ```
+
 ### 4. Configurar el Frontend (`/client`)
 
 Finalmente, configura la aplicación de React.
@@ -111,6 +121,13 @@ Finalmente, configura la aplicación de React.
 2.  **Instala las dependencias:**
     ```bash
     npm install
+    ```
+
+3.  **Configuración opcional de variables de entorno:**
+    El cliente puede funcionar con la configuración por defecto, pero si necesitas personalizar la URL de la API, puedes crear un archivo `.env.local`:
+    ```env
+    # Opcional: Solo si quieres cambiar la URL de la API
+    VITE_API_BASE_URL=http://localhost:3000
     ```
 
 ---
@@ -147,7 +164,12 @@ Aquí hay una lista de los comandos más útiles para cada parte del proyecto.
 * `npm run build`: Compila el proyecto para producción.
 * `npm run start:prod`: Inicia el servidor en modo de producción (requiere `build` previo).
 * `npm test`: Ejecuta las pruebas unitarias.
+* `npm run test:e2e`: Ejecuta las pruebas de integración end-to-end.
+* `npm run test:cov`: Ejecuta las pruebas con reporte de cobertura.
+* `npm run lint`: Ejecuta el linter para revisar la calidad del código.
+* `npm run format`: Formatea el código usando Prettier.
 * `npx prisma studio`: Abre una interfaz web para visualizar y editar los datos de tu base de datos.
+* `npx prisma migrate dev`: Ejecuta las migraciones de base de datos en desarrollo.
 
 ### Frontend (`/client`)
 
@@ -155,6 +177,107 @@ Aquí hay una lista de los comandos más útiles para cada parte del proyecto.
 * `npm run build`: Compila la aplicación para producción.
 * `npm run lint`: Ejecuta el linter para revisar la calidad del código.
 * `npm run preview`: Previsualiza la build de producción localmente.
+* `npm test`: Ejecuta las pruebas usando Vitest.
+
+---
+
+## 📁 Arquitectura del Proyecto
+
+### Estructura del Backend (`/server`)
+
+```
+server/
+├── src/
+│   ├── modules/           # Módulos de la aplicación
+│   │   ├── app/          # Módulo principal
+│   │   └── auth/         # Módulo de autenticación
+│   ├── shared/           # Recursos compartidos
+│   │   └── database/     # Configuración de Prisma
+│   └── common/           # Utilidades comunes
+│       ├── constants/    # Constantes globales
+│       ├── interfaces/   # Interfaces TypeScript
+│       └── types/        # Tipos TypeScript
+├── prisma/              # Esquema y migraciones de base de datos
+└── test/                # Tests e2e y unitarios
+```
+
+### Estructura del Frontend (`/client`)
+
+```
+client/
+├── src/
+│   ├── components/      # Componentes React
+│   │   ├── auth/       # Componentes de autenticación
+│   │   └── shared/     # Componentes reutilizables
+│   ├── pages/          # Páginas de la aplicación
+│   ├── hooks/          # Custom hooks
+│   ├── context/        # Contextos de React
+│   ├── api/            # Servicios de API
+│   ├── types/          # Tipos TypeScript
+│   ├── utils/          # Utilidades
+│   ├── constants/      # Constantes
+│   └── test/           # Tests de componentes
+└── public/             # Archivos estáticos
+```
+
+### Estado Actual del Desarrollo
+
+**✅ Funcionalidades Implementadas:**
+- Sistema de registro de usuarios completo (frontend + backend)
+- Validación de formularios con mensajes de error
+- Arquitectura modular escalable en ambos proyectos
+- Sistema de autenticación con React Context (preparado para login)
+- Base de datos con esquema completo de subastas
+- Tests unitarios y e2e
+- CI/CD con GitHub Actions
+- Componentes reutilizables (Button, Input, AuthStatus)
+
+**🚧 En Desarrollo:**
+- Sistema de login de usuarios
+- Dashboard de usuario
+- Funcionalidades de subastas en tiempo real
+
+**📋 Próximas Funcionalidades:**
+- Gestión de productos y subastas
+- Sistema de pujas en tiempo real
+- WebSockets para comunicación en vivo
+- Panel de administración
+
+---
+
+## 🧪 Tests Integrados
+
+Este proyecto cuenta con tests integrados para garantizar la calidad y el correcto funcionamiento del código.
+
+### Cómo Ejecutar los Tests
+
+#### Backend (`/server`):
+1. Navega al directorio del servidor:
+   ```bash
+   cd server
+   ```
+2. Ejecuta los tests unitarios:
+   ```bash
+   npm test
+   ```
+3. Ejecuta los tests de integración (end-to-end):
+   ```bash
+   npm run test:e2e
+   ```
+
+#### Frontend (`/client`):
+1. Navega al directorio del cliente:
+   ```bash
+   cd client
+   ```
+2. Ejecuta los tests:
+   ```bash
+   npm test
+   ```
+
+### Importancia de los Tests
+
+Es fundamental que se agreguen tests al añadir nuevo código para garantizar que las nuevas funcionalidades no introduzcan errores y que el sistema siga funcionando correctamente. Esto ayuda a mantener la calidad del proyecto y facilita el desarrollo colaborativo.
 
 ---
 

@@ -1,4 +1,4 @@
-// Este es el esquema de la base de datos corregido y listo para migrar.
+// Este es el esquema de la base de datos
 
 generator client {
   provider = "prisma-client-js"
