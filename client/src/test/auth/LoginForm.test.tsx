@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { LoginForm } from '../../components/auth/LoginForm';
 import { useLogin } from '../../hooks/auth/useLogin';
 import { vi } from 'vitest';
@@ -12,7 +12,7 @@ const mockedUseLogin = vi.mocked(useLogin);
 const mockHandleSubmit = vi.fn((e) => e.preventDefault());
 const mockHandleChange = vi.fn();
 
-// Componente Wrapper para simular el enrutamiento (necesario para <Link> y <Navigate>)
+// Componente Wrapper para simular el enrutamiento
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <BrowserRouter>{children}</BrowserRouter>
 );
@@ -40,15 +40,13 @@ describe('LoginForm', () => {
     expect(screen.getByRole('button', { name: /Iniciar Sesión/i })).toBeInTheDocument();
   });
   
-  it('2. Interacción: debería llamar a handleSubmit al enviar el formulario', async () => {
+  it('2. Interacción: debería llamar a handleSubmit al enviar el formulario', () => {
     const { container } = render(<LoginForm />, { wrapper: Wrapper });
-    
     const form = container.querySelector('form'); 
-
     expect(form).toBeInTheDocument();
-
-    fireEvent.submit(form!); 
-    
+    if(form) {
+      fireEvent.submit(form); 
+    }
     expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
   });
 
@@ -65,7 +63,8 @@ describe('LoginForm', () => {
     mockedUseLogin.mockReturnValue({ ...defaultHookValue, isLoading: true });
 
     render(<LoginForm />, { wrapper: Wrapper });
-
+    
+    // El texto ahora viene de i18next
     const loadingButton = screen.getByRole('button', { name: /Cargando.../i });
     expect(loadingButton).toBeInTheDocument();
     expect(loadingButton).toBeDisabled();

@@ -5,13 +5,14 @@ import type{ RegisterData } from '../../types/auth/auth';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
+import type { TFunction } from 'i18next';
 
 // Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
 type RegisterFormData = RegisterData & { confirmPassword: string };
 
 const REDIRECT_DELAY_MS = 3000; // 3 segundos antes de la redirección
 
-export const useRegister = () => {
+export const useRegister = (t: TFunction<'auth'>) => {
     // const { login } = useAuth(); 
     const navigate = useNavigate(); // Inicializar useNavigate
 
@@ -60,7 +61,7 @@ export const useRegister = () => {
         event.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Las contraseñas no coinciden.');
+            setError(t('register.error.passwordsDoNotMatch'));
             return; // Detenemos el envío si no coinciden
         }
 
@@ -72,16 +73,12 @@ export const useRegister = () => {
             const { name, email, password } = formData;
             await registerUser({ name, email, password });
       
-            setSuccess('¡Registro completado con éxito! Redirigiendo para iniciar sesión...');
-            // No limpiamos formData aquí para que el usuario pueda ver el éxito,
-            // pero lo haremos al redirigir si no hay login automático.
+            setSuccess(t('register.successMessage'));
             
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
-                const errorMessage = Array.isArray(err.response.data.message)
-                ? err.response.data.message.join(', ')
-                : err.response.data.message;
-                setError(errorMessage || 'Ocurrió un error inesperado.');
+              const errorKey = err.response.data.message;
+              setError(t(`apiError.${errorKey}`, 'Ocurrió un error inesperado.'));
             } else {
                 setError('No se pudo conectar con el servidor.');
             }

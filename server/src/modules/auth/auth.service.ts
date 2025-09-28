@@ -21,7 +21,7 @@ export class AuthService {
     });
 
     if (userExists) {
-      throw new ConflictException('El email ya está en uso');
+      throw new ConflictException('AUTH_EMAIL_IN_USE');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,13 +47,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('AUTH_INVALID_CREDENTIALS');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('AUTH_INVALID_CREDENTIALS');
     }
 
     // Creamos el payload del token

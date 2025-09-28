@@ -1,9 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
-import { useRegister } from '../../hooks/auth/useRegister'; 
+import { useRegister } from '../../hooks/auth/useRegister';
 import * as authApi from '../../api/auth/authApi';
 import { vi } from 'vitest';
 import axios from 'axios';
 import { ROUTES } from '../../constants';
+import type { TFunction } from 'i18next';
 
 vi.mock('axios');
 vi.mock('../../api/auth/authApi');
@@ -11,12 +12,14 @@ vi.mock('../../api/auth/authApi');
 // Mockear useNavigate de react-router-dom
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal() as object;
   return {
     ...actual,
     useNavigate: () => mockNavigate,
   };
 });
+
+const mockT: TFunction<'auth'> = (key: string | string[]) => key as string;
 
 describe('useRegister Hook', () => {
   const mockRegisterUser = vi.spyOn(authApi, 'registerUser');
@@ -24,7 +27,7 @@ describe('useRegister Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    vi.mocked(axios.isAxiosError).mockReturnValue(false); 
+    vi.mocked(axios.isAxiosError).mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -34,7 +37,8 @@ describe('useRegister Hook', () => {
   it('4. Lógica de Hooks: debería manejar el estado de carga (isLoading) correctamente', async () => {
     mockRegisterUser.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve({ id: '1', email: 'test@test.com', name: 'Test User', createdAt: '', updatedAt: '' }), 100)));
 
-    const { result } = renderHook(() => useRegister());
+    // ¡Pasa el mock de `t` al hook!
+    const { result } = renderHook(() => useRegister(mockT));
     const event = { preventDefault: vi.fn() } as unknown as React.FormEvent;
 
     let submitPromise;
@@ -52,12 +56,12 @@ describe('useRegister Hook', () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-   it('4. Lógica de Hooks: debería redirigir al login después de un registro exitoso', async () => {
+  it('4. Lógica de Hooks: debería redirigir al login después de un registro exitoso', async () => {
     const mockUser = { id: '1', email: 'test@test.com', name: 'Test User', createdAt: 'date', updatedAt: 'date' };
     mockRegisterUser.mockResolvedValue(mockUser);
     
-    // Configurar el formulario para que las contraseñas coincidan
-    const { result } = renderHook(() => useRegister());
+    // ¡Pasa el mock de `t` al hook!
+    const { result } = renderHook(() => useRegister(mockT));
     const event = { preventDefault: vi.fn() } as unknown as React.FormEvent;
 
     act(() => {
@@ -72,16 +76,16 @@ describe('useRegister Hook', () => {
       await result.current.handleSubmit(event);
     });
 
-    // 1. Verificar el mensaje de éxito
-    expect(result.current.success).toBe('¡Registro completado con éxito! Redirigiendo para iniciar sesión...');
+    // 1. Verificar que el mensaje de éxito es la CLAVE de traducción
+    expect(result.current.success).toBe('register.successMessage');
 
-    // 2. Ejecutar el temporizador de redirección (3 segundos)
+    // 2. Ejecutar el temporizador de redirección
     act(() => {
       vi.advanceTimersByTime(3000);
     });
 
-    // 3. Verificar que useNavigate fue llamado con la ruta correcta
+    // 3. Verificar que useNavigate fue llamado
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.LOGIN);
-    expect(result.current.success).toBeNull(); // Se limpia el mensaje
+    expect(result.current.success).toBeNull();
   });
 });
