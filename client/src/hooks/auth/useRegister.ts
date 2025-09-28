@@ -3,13 +3,18 @@ import { registerUser } from '../../api/auth/authApi';
 import type{ RegisterData } from '../../types/auth/auth';
 // import { useAuth } from '../../context'; // Listo para implementar login automático
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants';
 
 // Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
 type RegisterFormData = RegisterData & { confirmPassword: string };
 
+const REDIRECT_DELAY_MS = 3000; // 3 segundos antes de la redirección
+
 export const useRegister = () => {
-    // const { login } = useAuth(); // Contexto listo para login automático en el futuro
-    
+    // const { login } = useAuth(); 
+    const navigate = useNavigate(); // Inicializar useNavigate
+
     // Estado para manejar los campos del formulario
     const [formData, setFormData] = useState<RegisterFormData>({
         name: '',
@@ -24,20 +29,25 @@ export const useRegister = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // Si no hay mensaje de error o éxito, no hacemos nada
-        if (!error && !success) {
-            return;
+        if (success) {
+            // Si el registro es exitoso, esperamos 3 segundos y redirigimos
+            const redirectTimer = setTimeout(() => {
+                setSuccess(null); // Limpiar mensaje de éxito
+                navigate(ROUTES.LOGIN); // Redirigir al login
+            }, REDIRECT_DELAY_MS);
+
+            return () => clearTimeout(redirectTimer);
         }
 
-        // Inicia un temporizador
-        const timer = setTimeout(() => {
-            // Después de 5 segundos, limpia los mensajes
-            setError(null);
-            setSuccess(null);
-        }, 5000);
+        // Si solo hay error, el temporizador de 5 segundos sigue funcionando
+        if (error) {
+            const errorTimer = setTimeout(() => {
+                setError(null);
+            }, 5000);
 
-        return () => clearTimeout(timer);
-    }, [error, success]);
+            return () => clearTimeout(errorTimer);
+        }
+    }, [success, error, navigate]); // Añadir navigate a las dependencias
 
     // Manejador para actualizar el estado cuando el usuario escribe
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,9 +72,10 @@ export const useRegister = () => {
             const { name, email, password } = formData;
             await registerUser({ name, email, password });
       
-            // El contexto está listo para cuando implementemos login automático después del registro
-            setSuccess('¡Registro completado con éxito! Ahora puedes iniciar sesión.');
-            setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+            setSuccess('¡Registro completado con éxito! Redirigiendo para iniciar sesión...');
+            // No limpiamos formData aquí para que el usuario pueda ver el éxito,
+            // pero lo haremos al redirigir si no hay login automático.
+            
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
                 const errorMessage = Array.isArray(err.response.data.message)

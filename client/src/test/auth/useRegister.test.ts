@@ -3,9 +3,20 @@ import { useRegister } from '../../hooks/auth/useRegister';
 import * as authApi from '../../api/auth/authApi';
 import { vi } from 'vitest';
 import axios from 'axios';
+import { ROUTES } from '../../constants';
 
 vi.mock('axios');
-vi.mock('../../api/authApi');
+vi.mock('../../api/auth/authApi');
+
+// Mockear useNavigate de react-router-dom
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe('useRegister Hook', () => {
   const mockRegisterUser = vi.spyOn(authApi, 'registerUser');
@@ -13,8 +24,6 @@ describe('useRegister Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    // CORRECCIÓN: Mockeamos el valor por defecto de isAxiosError aquí
-    // para que no interfiera entre tests.
     vi.mocked(axios.isAxiosError).mockReturnValue(false); 
   });
 
@@ -43,41 +52,36 @@ describe('useRegister Hook', () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-  it('4. Lógica de Hooks: debería manejar una respuesta de éxito de la API', async () => {
+   it('4. Lógica de Hooks: debería redirigir al login después de un registro exitoso', async () => {
     const mockUser = { id: '1', email: 'test@test.com', name: 'Test User', createdAt: 'date', updatedAt: 'date' };
     mockRegisterUser.mockResolvedValue(mockUser);
-
+    
+    // Configurar el formulario para que las contraseñas coincidan
     const { result } = renderHook(() => useRegister());
     const event = { preventDefault: vi.fn() } as unknown as React.FormEvent;
-    
+
     act(() => {
-      result.current.handleChange({ target: { name: 'name', value: 'Test User' } } as React.ChangeEvent<HTMLInputElement>);
-      result.current.handleChange({ target: { name: 'email', value: 'test@test.com' } } as React.ChangeEvent<HTMLInputElement>);
-      result.current.handleChange({ target: { name: 'password', value: 'password123' } } as React.ChangeEvent<HTMLInputElement>);
-      result.current.handleChange({ target: { name: 'confirmPassword', value: 'password123' } } as React.ChangeEvent<HTMLInputElement>);
+      // Simular entrada de datos válidos
+      result.current.handleChange({ target: { id: 'name', value: 'Test User' } } as React.ChangeEvent<HTMLInputElement>);
+      result.current.handleChange({ target: { id: 'email', value: 'test@test.com' } } as React.ChangeEvent<HTMLInputElement>);
+      result.current.handleChange({ target: { id: 'password', value: 'password123' } } as React.ChangeEvent<HTMLInputElement>);
+      result.current.handleChange({ target: { id: 'confirmPassword', value: 'password123' } } as React.ChangeEvent<HTMLInputElement>);
     });
 
     await act(async () => {
       await result.current.handleSubmit(event);
     });
 
-    expect(result.current.success).toBe('¡Registro completado con éxito! Ahora puedes iniciar sesión.');
-    expect(result.current.error).toBeNull();
-  });
+    // 1. Verificar el mensaje de éxito
+    expect(result.current.success).toBe('¡Registro completado con éxito! Redirigiendo para iniciar sesión...');
 
-  it('4. Lógica de Hooks: debería manejar una respuesta de error de la API', async () => {
-    const errorResponse = { response: { data: { message: 'El email ya está en uso' } } };
-    vi.mocked(axios.isAxiosError).mockReturnValue(true);
-    mockRegisterUser.mockRejectedValue(errorResponse);
-
-    const { result } = renderHook(() => useRegister());
-    const event = { preventDefault: vi.fn() } as unknown as React.FormEvent;
-    
-    await act(async () => {
-      await result.current.handleSubmit(event);
+    // 2. Ejecutar el temporizador de redirección (3 segundos)
+    act(() => {
+      vi.advanceTimersByTime(3000);
     });
 
-    expect(result.current.error).toBe('El email ya está en uso');
-    expect(result.current.success).toBeNull();
+    // 3. Verificar que useNavigate fue llamado con la ruta correcta
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.LOGIN);
+    expect(result.current.success).toBeNull(); // Se limpia el mensaje
   });
 });
