@@ -30,7 +30,7 @@ export const RegisterForm = () => {
             id="name"
             value={formData.name}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           
@@ -41,7 +41,7 @@ export const RegisterForm = () => {
             id="email"
             value={formData.email}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           
@@ -52,7 +52,7 @@ export const RegisterForm = () => {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           
@@ -63,7 +63,7 @@ export const RegisterForm = () => {
             id="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           

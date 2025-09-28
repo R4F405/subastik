@@ -34,7 +34,7 @@ export const LoginForm = () => {
             id="email"
             value={formData.email}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           
@@ -45,7 +45,7 @@ export const LoginForm = () => {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            variant="light" // Cambiado a 'light'
+            variant="light"
             required
           />
           
