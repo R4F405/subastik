@@ -90,7 +90,7 @@ describe('AuthController (e2e)', () => {
       password: validUser.password,
     };
     
-    it('debería permitir iniciar sesión con credenciales válidas y devolver un token', () => {
+    it('debería permitir iniciar sesión con credenciales válidas y devolver un token JWT', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send(loginCredentials)
@@ -98,6 +98,8 @@ describe('AuthController (e2e)', () => {
         .then((res) => {
           expect(res.body).toHaveProperty('access_token');
           expect(typeof res.body.access_token).toBe('string');
+          // Un JWT tiene 3 partes separadas por puntos
+          expect(res.body.access_token.split('.').length).toBe(3);
           expect(res.body.user.email).toEqual(validUser.email);
           expect(res.body.user).not.toHaveProperty('password');
         });
