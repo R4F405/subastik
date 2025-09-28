@@ -69,7 +69,7 @@
     ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": ["ts-jest", { "transpileOnly": true }]
+      "^.+\\.(t|j)s$": ["ts-jest", { "isolatedModules": true, "allowSyntheticDefaultImports": true }]
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

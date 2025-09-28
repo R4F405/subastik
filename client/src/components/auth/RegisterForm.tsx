@@ -1,5 +1,7 @@
 import { useRegister } from '../../hooks/auth/useRegister';
 import { Button, Input } from '../shared';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../../constants';
 
 export const RegisterForm = () => {
   const { formData, isLoading, error, success, handleChange, handleSubmit } = useRegister();
@@ -76,9 +78,9 @@ export const RegisterForm = () => {
         </form>
         <p className="text-sm text-center text-gray-400">
           ¿Ya tienes una cuenta?{' '}
-          <a href="/login" className="font-medium text-red-500 hover:underline">
+          <Link to={ROUTES.LOGIN} className="font-medium text-red-500 hover:underline"> {/* RUTA CORREGIDA */}
             Inicia sesión
-          </a>
+          </Link>
         </p>
       </div>
     </div>
