@@ -78,7 +78,7 @@ export const useRegister = (t: TFunction<'auth'>) => {
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
               const errorKey = err.response.data.message;
-              setError(t(`apiError.${errorKey}`, 'Ocurrió un error inesperado.'));
+              setError(t(`apiError.${errorKey}`));
             } else {
                 setError('No se pudo conectar con el servidor.');
             }
