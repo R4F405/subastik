@@ -3,13 +3,19 @@ import { registerUser } from '../../api/auth/authApi';
 import type{ RegisterData } from '../../types/auth/auth';
 // import { useAuth } from '../../context'; // Listo para implementar login automático
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants';
+import type { TFunction } from 'i18next';
 
 // Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
 type RegisterFormData = RegisterData & { confirmPassword: string };
 
-export const useRegister = () => {
-    // const { login } = useAuth(); // Contexto listo para login automático en el futuro
-    
+const REDIRECT_DELAY_MS = 3000; // 3 segundos antes de la redirección
+
+export const useRegister = (t: TFunction<'auth'>) => {
+    // const { login } = useAuth(); 
+    const navigate = useNavigate(); // Inicializar useNavigate
+
     // Estado para manejar los campos del formulario
     const [formData, setFormData] = useState<RegisterFormData>({
         name: '',
@@ -24,20 +30,25 @@ export const useRegister = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // Si no hay mensaje de error o éxito, no hacemos nada
-        if (!error && !success) {
-            return;
+        if (success) {
+            // Si el registro es exitoso, esperamos 3 segundos y redirigimos
+            const redirectTimer = setTimeout(() => {
+                setSuccess(null); // Limpiar mensaje de éxito
+                navigate(ROUTES.LOGIN); // Redirigir al login
+            }, REDIRECT_DELAY_MS);
+
+            return () => clearTimeout(redirectTimer);
         }
 
-        // Inicia un temporizador
-        const timer = setTimeout(() => {
-            // Después de 5 segundos, limpia los mensajes
-            setError(null);
-            setSuccess(null);
-        }, 5000);
+        // Si solo hay error, el temporizador de 5 segundos sigue funcionando
+        if (error) {
+            const errorTimer = setTimeout(() => {
+                setError(null);
+            }, 5000);
 
-        return () => clearTimeout(timer);
-    }, [error, success]);
+            return () => clearTimeout(errorTimer);
+        }
+    }, [success, error, navigate]); // Añadir navigate a las dependencias
 
     // Manejador para actualizar el estado cuando el usuario escribe
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +61,7 @@ export const useRegister = () => {
         event.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Las contraseñas no coinciden.');
+            setError(t('register.error.passwordsDoNotMatch'));
             return; // Detenemos el envío si no coinciden
         }
 
@@ -62,15 +73,12 @@ export const useRegister = () => {
             const { name, email, password } = formData;
             await registerUser({ name, email, password });
       
-            // El contexto está listo para cuando implementemos login automático después del registro
-            setSuccess('¡Registro completado con éxito! Ahora puedes iniciar sesión.');
-            setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+            setSuccess(t('register.successMessage'));
+            
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
-                const errorMessage = Array.isArray(err.response.data.message)
-                ? err.response.data.message.join(', ')
-                : err.response.data.message;
-                setError(errorMessage || 'Ocurrió un error inesperado.');
+              const errorKey = err.response.data.message;
+              setError(t(`apiError.${errorKey}`, 'Ocurrió un error inesperado.'));
             } else {
                 setError('No se pudo conectar con el servidor.');
             }

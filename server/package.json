@@ -22,6 +22,7 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -69,7 +70,13 @@
     ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": ["ts-jest", { "transpileOnly": true }]
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "isolatedModules": true,
+          "allowSyntheticDefaultImports": true
+        }
+      ]
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

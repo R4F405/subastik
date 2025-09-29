@@ -7,7 +7,12 @@ import { PrismaService } from '../../src/shared/database/prisma.service';
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-
+  
+  const validUser = {
+      name: 'E2E Test User',
+      email: 'e2e@test.com',
+      password: 'password123',
+    };
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -76,6 +81,56 @@ describe('AuthController (e2e)', () => {
         .post('/auth/register')
         .send({ ...validUser, email: 'another@email.com', name: '' })
         .expect(400);
+    });
+  });
+
+  describe('/auth/login (POST)', () => {
+    const loginCredentials = {
+      email: validUser.email,
+      password: validUser.password,
+    };
+    
+    it('debería permitir iniciar sesión con credenciales válidas y devolver un token JWT', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send(loginCredentials)
+        .expect(200)
+        .then((res) => {
+          expect(res.body).toHaveProperty('access_token');
+          expect(typeof res.body.access_token).toBe('string');
+          // Un JWT tiene 3 partes separadas por puntos
+          expect(res.body.access_token.split('.').length).toBe(3);
+          expect(res.body.user.email).toEqual(validUser.email);
+          expect(res.body.user).not.toHaveProperty('password');
+        });
+    });
+
+    it('debería devolver un error 401 (Unauthorized) con contraseña incorrecta', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ ...loginCredentials, password: 'wrongpassword' })
+        .expect(401);
+    });
+
+    it('debería devolver un error 401 (Unauthorized) con email no registrado', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ ...loginCredentials, email: 'nonexistent@test.com' })
+        .expect(401);
+    });
+
+    it('debería devolver un error 400 (Bad Request) si falta el email (ValidationPipe)', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ password: loginCredentials.password })
+        .expect(400);
+    });
+    
+    it('debería devolver un error 400 (Bad Request) si el email es inválido', () => {
+        return request(app.getHttpServer())
+            .post('/auth/login')
+            .send({ ...loginCredentials, email: 'not-an-email' })
+            .expect(400);
     });
   });
 });
