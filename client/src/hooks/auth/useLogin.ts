@@ -1,12 +1,14 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { loginUser } from '../../api/auth/authApi';
 import type { LoginData } from '../../types/auth/auth';
 import { useAuth } from '../../context';
 import axios from 'axios';
 
 export const useLogin = () => {
-    const { login } = useAuth(); 
-    
+    const { login } = useAuth();
+    const { t } = useTranslation('auth');
+
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: '',
@@ -45,12 +47,13 @@ export const useLogin = () => {
             setFormData({ email: '', password: '' });
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
-                const errorMessage = Array.isArray(err.response.data.message)
-                ? err.response.data.message.join(', ')
-                : err.response.data.message;
-                setError(errorMessage || 'Ocurrió un error inesperado al iniciar sesión.');
+                const errorKey = Array.isArray(err.response.data.message)
+                    ? err.response.data.message[0]
+                    : err.response.data.message;
+                
+                setError(t(`apiError.${errorKey}`,));
             } else {
-                setError('No se pudo conectar con el servidor.');
+                setError(t('apiError.NETWORK_ERROR'));
             }
         } finally {
             setIsLoading(false);
