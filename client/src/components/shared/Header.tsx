@@ -9,8 +9,6 @@ export const Header = () => {
   const [appDropdownClicked, setAppDropdownClicked] = useState(false);
   const appDropdownRef = useRef<HTMLDivElement>(null);
 
-
-
   return (
     <header className="flex items-center justify-between p-4 bg-gray-800 text-white shadow-xl">
       {/* Logo */}
