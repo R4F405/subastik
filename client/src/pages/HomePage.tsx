@@ -1,9 +1,15 @@
-
-import { Header } from '../components/dashboard/Header';
-
+import { Header } from '../components/shared/Header';
+import Menu from '../components/shared/Menu';
 
 const Homepage = () => {
-  return <Header />;
+
+  return (
+    <>
+      <Header />
+      <Menu />
+      
+    </>
+  );
 };
 
-//falta el import del menu
+export default Homepage;
