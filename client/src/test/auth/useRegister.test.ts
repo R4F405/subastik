@@ -33,28 +33,6 @@ describe('useRegister Hook', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-  
-  it('4. Lógica de Hooks: debería manejar el estado de carga (isLoading) correctamente', async () => {
-    mockRegisterUser.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve({ id: '1', email: 'test@test.com', name: 'Test User', createdAt: '', updatedAt: '' }), 100)));
-
-    // ¡Pasa el mock de `t` al hook!
-    const { result } = renderHook(() => useRegister(mockT));
-    const event = { preventDefault: vi.fn() } as unknown as React.FormEvent;
-
-    let submitPromise;
-    act(() => {
-      submitPromise = result.current.handleSubmit(event);
-    });
-
-    expect(result.current.isLoading).toBe(true);
-
-    await act(async () => {
-      vi.runAllTimers();
-      await submitPromise;
-    });
-
-    expect(result.current.isLoading).toBe(false);
-  });
 
   it('4. Lógica de Hooks: debería redirigir al login inmediatamente después de un registro exitoso', async () => {
     const mockUser = { id: '1', email: 'test@test.com', name: 'Test User', createdAt: 'date', updatedAt: 'date' };

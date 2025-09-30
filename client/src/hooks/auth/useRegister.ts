@@ -66,7 +66,7 @@ export const useRegister = (t: TFunction<'auth'>) => {
                     : err.response.data.message;
                 setError(t(`apiError.${errorKey}`));
             } else {
-                setError('No se pudo conectar con el servidor.');
+                setError(t('apiError.NETWORK_ERROR'));
             }
         } finally {
             setIsLoading(false);
