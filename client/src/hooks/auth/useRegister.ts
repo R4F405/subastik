@@ -45,6 +45,11 @@ export const useRegister = (t: TFunction<'auth'>) => {
             return;
         }
 
+        if (formData.password.length < 8) {
+            setError(t('apiError.PASSWORD_MIN_LENGTH'));
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
 
