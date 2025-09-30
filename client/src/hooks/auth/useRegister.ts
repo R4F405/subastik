@@ -64,7 +64,7 @@ export const useRegister = (t: TFunction<'auth'>) => {
                 const errorKey = Array.isArray(err.response.data.message)
                     ? err.response.data.message[0]
                     : err.response.data.message;
-                setError(t(`apiError.${errorKey}`));
+                setError(t(`${errorKey}`));
             } else {
                 setError(t('apiError.NETWORK_ERROR'));
             }
