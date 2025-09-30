@@ -10,6 +10,6 @@ export class RegisterDto {
   email: string;
 
   @IsString()
-  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
+  @MinLength(8, { message: 'PASSWORD_MIN_LENGTH' })
   password: string;
 }

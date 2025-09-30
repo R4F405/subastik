@@ -10,13 +10,9 @@ import type { TFunction } from 'i18next';
 // Extendemos el tipo localmente para incluir el campo de confirmación de contraseña
 type RegisterFormData = RegisterData & { confirmPassword: string };
 
-const REDIRECT_DELAY_MS = 3000; // 3 segundos antes de la redirección
-
 export const useRegister = (t: TFunction<'auth'>) => {
-    // const { login } = useAuth(); 
-    const navigate = useNavigate(); // Inicializar useNavigate
+    const navigate = useNavigate();
 
-    // Estado para manejar los campos del formulario
     const [formData, setFormData] = useState<RegisterFormData>({
         name: '',
         email: '',
@@ -24,75 +20,63 @@ export const useRegister = (t: TFunction<'auth'>) => {
         confirmPassword: '',
     });
 
-    // Estado para el feedback al usuario
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (success) {
-            // Si el registro es exitoso, esperamos 3 segundos y redirigimos
-            const redirectTimer = setTimeout(() => {
-                setSuccess(null); // Limpiar mensaje de éxito
-                navigate(ROUTES.LOGIN); // Redirigir al login
-            }, REDIRECT_DELAY_MS);
-
-            return () => clearTimeout(redirectTimer);
-        }
-
-        // Si solo hay error, el temporizador de 5 segundos sigue funcionando
         if (error) {
             const errorTimer = setTimeout(() => {
                 setError(null);
             }, 5000);
-
             return () => clearTimeout(errorTimer);
         }
-    }, [success, error, navigate]); // Añadir navigate a las dependencias
+    }, [error]);
 
-    // Manejador para actualizar el estado cuando el usuario escribe
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [id]: value }));
     };
 
-    // Lógica para manejar el envío del formulario
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
             setError(t('register.error.passwordsDoNotMatch'));
-            return; // Detenemos el envío si no coinciden
+            return;
+        }
+
+        if (formData.password.length < 8) {
+            setError(t('apiError.PASSWORD_MIN_LENGTH'));
+            return;
         }
 
         setIsLoading(true);
         setError(null);
-        setSuccess(null);
 
         try {
             const { name, email, password } = formData;
             await registerUser({ name, email, password });
-      
-            setSuccess(t('register.successMessage'));
+            
+            navigate(ROUTES.LOGIN);
             
         } catch (err: unknown) {
-            if (axios.isAxiosError(err) && err.response) {
-              const errorKey = err.response.data.message;
-              setError(t(`apiError.${errorKey}`, 'Ocurrió un error inesperado.'));
+            if (axios.isAxiosError(err) && err.response?.data?.message) {
+                const errorKey = Array.isArray(err.response.data.message)
+                    ? err.response.data.message[0]
+                    : err.response.data.message;
+                setError(t(`apiError.${errorKey}`));
             } else {
-                setError('No se pudo conectar con el servidor.');
+                setError(t('apiError.NETWORK_ERROR'));
             }
         } finally {
-        setIsLoading(false);
+            setIsLoading(false);
         }
     };
 
-    // El hook devuelve el estado y las funciones que el componente necesita
     return {
         formData,
         isLoading,
         error,
-        success,
         handleChange,
         handleSubmit,
     };
