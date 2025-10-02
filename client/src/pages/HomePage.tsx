@@ -1,11 +1,15 @@
-import React from 'react';
+import { Header } from '../components/shared/Header';
+import Menu from '../components/shared/Menu';
 
-const HomePage: React.FC = () => {
+const Homepage = () => {
+
   return (
-    
-    <h1 className="text-5xl font-bold mb-4">Subastik</h1>
-        
+    <>
+      <Header />
+      <Menu />
+      
+    </>
   );
 };
 
-export default HomePage;
+export default Homepage;
