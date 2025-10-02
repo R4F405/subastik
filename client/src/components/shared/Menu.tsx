@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Menu = () => {
+  const { t } = useTranslation('menu');
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -34,25 +36,25 @@ const Menu = () => {
         {/* Opciones principales */}
         <div className="flex space-x-6 items-center">
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Coches
+            {t('cars')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Motos
+            {t('motorcycles')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Motor y accesorios
+            {t('motor_accessories')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Moda y accesorios
+            {t('fashion_accessories')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Inmobiliaria
+            {t('real_estate')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Tecnología
+            {t('technology')}
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Informática
+            {t('computing')}
           </a>
         </div>
       </div>
@@ -61,13 +63,13 @@ const Menu = () => {
       {isOpen && (
         <div className="px-8 py-4 bg-gray-100">
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Tecnología y electrónica
+            {t('technology_electronics')}
           </a>
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Móviles y Telefonía
+            {t('mobiles_telephony')}
           </a>
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Informática
+            {t('computing')}
           </a>
         </div>
       )}
