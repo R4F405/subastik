@@ -1,13 +1,16 @@
 import { Button } from '.';
+import { ROUTES } from '../../constants';
 import { Image } from './Image';
 import { Search } from './Search';
 import { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
   const [showAppDownload, setShowAppDownload] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [appDropdownClicked, setAppDropdownClicked] = useState(false);
   const appDropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   return (
     <header className="flex items-center justify-between p-4 bg-gray-800 text-white shadow-xl">
@@ -124,7 +127,7 @@ export const Header = () => {
           variant="primary"
           size="lg"
           className="text-sm"
-          onClick={() => (window.location.href = '/login')}
+          onClick={() => navigate(ROUTES.LOGIN)}
         >
           Registrate o inicia sesión
         </Button>

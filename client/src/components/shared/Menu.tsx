@@ -33,26 +33,24 @@ const Menu = () => {
 
         {/* Opciones principales */}
         <div className="flex space-x-6 items-center">
+          
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Coches
+            Motor
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Motos
+            Electrónica
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Motor y accesorios
+            Moda
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Moda y accesorios
+            Consolas y videojuegos
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Inmobiliaria
+            Coleccionismo
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
-            Tecnología
-          </a>
-          <a href="#" className="text-gray-800 hover:text-red-500">
-            Informática
+            Móviles y Telefonía
           </a>
         </div>
       </div>
