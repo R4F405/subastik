@@ -2,13 +2,9 @@ import { Button } from '.';
 import { ROUTES } from '../../constants';
 import { Image } from './Image';
 import { Search } from './Search';
-<<<<<<< HEAD
-import { useRef, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-=======
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
->>>>>>> 18f707e5f9c5757cafaf71a2050b054b911d235d
 
 export const Header = () => {
   const { t } = useTranslation('header');
