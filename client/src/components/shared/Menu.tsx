@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Menu = () => {
+  const { t } = useTranslation('menu');
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -35,6 +37,7 @@ const Menu = () => {
         <div className="flex space-x-6 items-center">
           
           <a href="#" className="text-gray-800 hover:text-red-500">
+<<<<<<< HEAD
             Motor
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
@@ -51,6 +54,27 @@ const Menu = () => {
           </a>
           <a href="#" className="text-gray-800 hover:text-red-500">
             Móviles y Telefonía
+=======
+            {t('cars')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('motorcycles')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('motor_accessories')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('fashion_accessories')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('real_estate')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('technology')}
+          </a>
+          <a href="#" className="text-gray-800 hover:text-red-500">
+            {t('computing')}
+>>>>>>> 18f707e5f9c5757cafaf71a2050b054b911d235d
           </a>
         </div>
       </div>
@@ -59,13 +83,13 @@ const Menu = () => {
       {isOpen && (
         <div className="px-8 py-4 bg-gray-100">
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Tecnología y electrónica
+            {t('technology_electronics')}
           </a>
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Móviles y Telefonía
+            {t('mobiles_telephony')}
           </a>
           <a href="#" className="block text-gray-800 hover:text-red-500">
-            Informática
+            {t('computing')}
           </a>
         </div>
       )}

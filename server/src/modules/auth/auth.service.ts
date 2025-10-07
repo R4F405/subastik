@@ -15,13 +15,13 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { name, email, password } = registerDto;
-
+    
     const userExists = await this.prisma.user.findUnique({
       where: { email },
     });
 
     if (userExists) {
-      throw new ConflictException('AUTH_EMAIL_IN_USE');
+      throw new ConflictException('apiError.AUTH_EMAIL_IN_USE');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,13 +47,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('AUTH_INVALID_CREDENTIALS');
+      throw new UnauthorizedException('apiError.AUTH_INVALID_CREDENTIALS');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('AUTH_INVALID_CREDENTIALS');
+      throw new UnauthorizedException('apiError.AUTH_INVALID_CREDENTIALS');
     }
 
     // Creamos el payload del token

@@ -18,7 +18,6 @@ export const RegisterForm = () => {
         </div>
 
         {error && <div className="p-3 my-2 text-sm text-red-800 bg-red-100 rounded-md border border-red-300">{error}</div>}
-        {success && <div className="p-3 my-2 text-sm text-green-800 bg-green-100 rounded-md border border-green-300">{success}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <Input

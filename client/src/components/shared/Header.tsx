@@ -2,10 +2,16 @@ import { Button } from '.';
 import { ROUTES } from '../../constants';
 import { Image } from './Image';
 import { Search } from './Search';
+<<<<<<< HEAD
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+=======
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+>>>>>>> 18f707e5f9c5757cafaf71a2050b054b911d235d
 
 export const Header = () => {
+  const { t } = useTranslation('header');
   const [showAppDownload, setShowAppDownload] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [appDropdownClicked, setAppDropdownClicked] = useState(false);
@@ -25,7 +31,7 @@ export const Header = () => {
 
       {/* Barra de búsqueda */}
       <div className="flex-1 max-w-3xl mr-6">
-        <Search placeholder="¿Qué estás buscando?" />
+        <Search placeholder={t('search_placeholder')} />
       </div>
 
       {/* Botones */}
@@ -35,7 +41,9 @@ export const Header = () => {
           className="relative"
           ref={appDropdownRef}
           onMouseEnter={() => setShowAppDownload(true)}
-          onMouseLeave={() => { if (!appDropdownClicked) setShowAppDownload(false); }}
+          onMouseLeave={() => {
+            if (!appDropdownClicked) setShowAppDownload(false);
+          }}
         >
           <Button
             variant="danger"
@@ -60,14 +68,12 @@ export const Header = () => {
                 d="M12 4v16m8-8H4"
               />
             </svg>
-            Descarga la App
+            {t('download_app')}
           </Button>
           {showAppDownload && (
-            <div
-              className="absolute top-full mt-2 p-4 bg-white text-black shadow-lg rounded z-50"
-            >
+            <div className="absolute top-full mt-2 p-4 bg-white text-black shadow-lg rounded z-50">
               <p className="text-sm font-bold mb-2 text-center">
-                DESCARGA LA APP DE SUBASTIK
+                {t('download_app_title')}
               </p>
               <div className="flex gap-4 justify-center">
                 <Button className="bg-black text-white flex items-center gap-2 text-sm">
@@ -85,7 +91,7 @@ export const Header = () => {
                       d="M4 4h16v16H4z"
                     />
                   </svg>
-                  APP STORE
+                  {t('app_store')}
                 </Button>
                 <Button className="bg-black text-white flex items-center gap-2 text-sm">
                   <svg
@@ -102,7 +108,7 @@ export const Header = () => {
                       d="M4 4h16v16H4z"
                     />
                   </svg>
-                  GOOGLE PLAY
+                  {t('google_play')}
                 </Button>
               </div>
             </div>
@@ -116,10 +122,21 @@ export const Header = () => {
           className="text-red-600 flex items-center gap-2 border-none bg-transparent justify-start text-sm"
           onClick={() => console.log('Favoritos clicked')}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
           </svg>
-          Favoritos
+          {t('favorites')}
         </Button>
 
         {/* Botones actuales */}
@@ -129,7 +146,7 @@ export const Header = () => {
           className="text-sm"
           onClick={() => navigate(ROUTES.LOGIN)}
         >
-          Registrate o inicia sesión
+          {t('register_or_login')}
         </Button>
         <Button
           variant="primary"
@@ -137,10 +154,21 @@ export const Header = () => {
           className="flex items-center gap-2 text-sm"
           onClick={() => console.log('Subastar clicked')}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
-          Subastar
+          {t('auction')}
         </Button>
 
         {/* Botón de idiomas */}
@@ -151,27 +179,47 @@ export const Header = () => {
             className="text-red-600 flex items-center gap-2 border-none bg-transparent justify-start text-sm"
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
           >
-            <img src="/Imagenes/spain.png" alt="España" className="h-5 w-5" />
-            ES
+            <img
+              src="/Imagenes/spain.png"
+              alt={t('spain')}
+              className="h-5 w-5"
+            />
+            {t('es')}
           </Button>
           {showLanguageDropdown && (
             <div className="absolute top-full mt-2 p-4 bg-white text-black shadow-lg rounded">
               <ul className="flex flex-col gap-2">
                 <li className="flex items-center gap-2">
-                  <img src="/Imagenes/spain.png" alt="España" className="h-5 w-5" />
-                  ES
+                  <img
+                    src="/Imagenes/spain.png"
+                    alt={t('spain')}
+                    className="h-5 w-5"
+                  />
+                  {t('es')}
                 </li>
                 <li className="flex items-center gap-2">
-                  <img src="/Imagenes/france.png" alt="Francia" className="h-5 w-5" />
-                  FR
+                  <img
+                    src="/Imagenes/france.png"
+                    alt={t('france')}
+                    className="h-5 w-5"
+                  />
+                  {t('fr')}
                 </li>
                 <li className="flex items-center gap-2">
-                  <img src="/Imagenes/uk.png" alt="Inglaterra" className="h-5 w-5" />
-                  ING
+                  <img
+                    src="/Imagenes/uk.png"
+                    alt={t('uk')}
+                    className="h-5 w-5"
+                  />
+                  {t('en')}
                 </li>
                 <li className="flex items-center gap-2">
-                  <img src="/Imagenes/italy.png" alt="Italia" className="h-5 w-5" />
-                  IT
+                  <img
+                    src="/Imagenes/italy.png"
+                    alt={t('italy')}
+                    className="h-5 w-5"
+                  />
+                  {t('it')}
                 </li>
               </ul>
             </div>
