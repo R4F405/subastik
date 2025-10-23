@@ -37,7 +37,7 @@ describe('LoginForm', () => {
 
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Iniciar Sesión/i })).toBeInTheDocument(); // Cambiado para que falle
+    expect(screen.getByRole('button', { name: /Iniciar Sesiónasdssa/i })).toBeInTheDocument(); // Cambiado para que falle
   });
   
   it('2. Interacción: debería llamar a handleSubmit al enviar el formulario', () => {
